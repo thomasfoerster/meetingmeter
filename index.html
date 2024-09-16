@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Redirect - Meeting Meter - Keep track of meeting costs</title>
+    <script>
+        function redirectBasedOnLanguage() {
+            var userLang = navigator.language || navigator.userLanguage;
+            userLang = userLang.substr(0, 2).toLowerCase();
+
+            if (userLang === 'de') {
+                window.location.href = '/de/';
+            } else {
+                window.location.href = '/en/';
+            }
+        }
+        window.onload = redirectBasedOnLanguage;
+    </script>
+</head>
+<body>
+<noscript>
+    <p><a href="/de/">Deutsche Version</a> | <a href="/en/">English Version</a></p>
+</noscript>
+</body>
+</html>
