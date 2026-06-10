@@ -24,8 +24,8 @@
                         </svg>
                     </div>
                     <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="#" class="border-slate-400 text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-semibold">Meeting Meter</a>
-                        <a href="#" class="border-transparent text-slate-400 hover:border-slate-600 hover:text-slate-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">Speak Timer</a>
+                        <a href="#" id="nav-meter" data-view="meter" class="border-slate-400 text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-semibold transition-colors">Meeting Meter</a>
+                        <a href="#" id="nav-speak" data-view="speak" class="border-transparent text-slate-400 hover:border-slate-600 hover:text-slate-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors">Speak Timer</a>
                     </div>
                 </div>
             </div>
@@ -34,8 +34,8 @@
 
     <main class="flex-grow">
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            <!-- Hero section -->
-            <div class="px-4 py-6 sm:px-0">
+            <!-- Meeting Meter view -->
+            <div id="view-meter" class="px-4 py-6 sm:px-0">
                 <h1 class="text-3xl sm:text-4xl font-bold text-center text-white mb-8 tracking-tight">This meeting costs</h1>
 
                 <div class="bg-slate-900 overflow-hidden ring-1 ring-slate-800 rounded-2xl">
@@ -60,7 +60,7 @@
 
                             <div class="space-y-4">
                                 <button type="button" id="start" class="w-full inline-flex justify-center items-center rounded-lg border border-transparent shadow-sm px-4 py-2.5 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-emerald-500 transition-colors sm:text-sm">Start</button>
-                                <button type="button" id="stop" class="w-full inline-flex justify-center items-center rounded-lg border border-transparent shadow-sm px-4 py-2.5 bg-rose-500 text-base font-medium text-white hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-rose-400 transition-colors sm:text-sm">Stop</button>
+                                <button type="button" id="stop" class="w-full inline-flex justify-center items-center rounded-lg border border-transparent shadow-sm px-4 py-2.5 bg-slate-600 text-base font-medium text-white hover:bg-slate-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-slate-400 transition-colors sm:text-sm">Stop</button>
                                 <button type="button" id="reset" class="w-full inline-flex justify-center items-center rounded-lg border border-slate-700 bg-slate-800 px-4 py-2.5 text-base font-medium text-slate-200 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-slate-500 transition-colors sm:text-sm">Reset</button>
                             </div>
                         </div>
@@ -68,6 +68,62 @@
                 </div>
 
                 <p class="mt-6 text-center text-slate-400">Enter the number of attendees and an average hourly rate, then press Start.</p>
+            </div>
+
+            <!-- Speak Timer view -->
+            <div id="view-speak" class="hidden px-4 py-6 sm:px-0">
+                <h1 class="text-3xl sm:text-4xl font-bold text-center text-white mb-8 tracking-tight">Speak Timer</h1>
+
+                <!-- Setup -->
+                <div id="st-setup" class="bg-slate-900 ring-1 ring-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 max-w-2xl mx-auto">
+                    <div>
+                        <label for="st-speakers" class="block text-lg font-medium text-slate-300">Speaker list</label>
+                        <p class="text-sm text-slate-500 mb-2">One person per line.</p>
+                        <textarea id="st-speakers" rows="6" placeholder="Anna&#10;Ben&#10;Clara" class="block w-full rounded-lg bg-slate-800 border-slate-700 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-lg font-medium text-slate-300 mb-1">Speaking time per person</label>
+                        <div class="flex items-end gap-3">
+                            <div class="flex-1">
+                                <label for="st-min" class="block text-sm text-slate-500">Minutes</label>
+                                <input id="st-min" type="number" value="3" min="0" class="mt-1 block w-full rounded-lg bg-slate-800 border-slate-700 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xl">
+                            </div>
+                            <span class="pb-2 text-2xl font-mono text-slate-500">:</span>
+                            <div class="flex-1">
+                                <label for="st-sec" class="block text-sm text-slate-500">Seconds</label>
+                                <input id="st-sec" type="number" value="0" min="0" max="59" class="mt-1 block w-full rounded-lg bg-slate-800 border-slate-700 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-xl">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="st-start" class="w-full inline-flex justify-center items-center rounded-lg border border-transparent shadow-sm px-4 py-2.5 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-emerald-500 transition-colors">Start</button>
+                </div>
+
+                <!-- Stage -->
+                <div id="st-stage" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 bg-slate-900 ring-1 ring-slate-800 rounded-2xl p-8 flex flex-col items-center justify-center min-h-[22rem]">
+                        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-3">Speaking</p>
+                        <p id="st-current-name" class="text-4xl sm:text-5xl font-bold text-white text-center transition-opacity duration-300">&mdash;</p>
+                        <p id="st-time" class="mt-4 text-6xl sm:text-7xl font-mono font-semibold tabular-nums text-slate-100">0:00</p>
+
+                        <div class="w-full max-w-md mt-8">
+                            <div class="h-3 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div id="st-bar" class="h-full bg-indigo-400 rounded-full transition-[width] duration-1000 ease-linear" style="width:100%"></div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-3 justify-center mt-8">
+                            <button type="button" id="st-pause" class="inline-flex justify-center items-center rounded-lg px-5 py-2.5 bg-slate-700 text-base font-medium text-slate-100 hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-slate-500 transition-colors">Stop</button>
+                            <button type="button" id="st-next" class="inline-flex justify-center items-center rounded-lg px-5 py-2.5 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-emerald-500 transition-colors">Next</button>
+                            <button type="button" id="st-new" class="inline-flex justify-center items-center rounded-lg border border-slate-700 bg-slate-800 px-5 py-2.5 text-base font-medium text-slate-200 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-slate-500 transition-colors">New</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 ring-1 ring-slate-800 rounded-2xl p-6">
+                        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-4">Queue</p>
+                        <ul id="st-queue" class="space-y-2"></ul>
+                        <p id="st-empty" class="hidden text-slate-500 text-sm">All speakers have had their turn.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -147,6 +203,203 @@
     function updateCostsField() {
         costsField.textContent = totalCost.toFixed(2) + ' €';
     }
+
+    /* ---------- View switching ---------- */
+    const navMeter = document.getElementById('nav-meter');
+    const navSpeak = document.getElementById('nav-speak');
+    const viewMeter = document.getElementById('view-meter');
+    const viewSpeak = document.getElementById('view-speak');
+
+    const navActive = ['border-slate-400', 'text-white', 'font-semibold'];
+    const navInactive = ['border-transparent', 'text-slate-400', 'font-medium', 'hover:border-slate-600', 'hover:text-slate-200'];
+
+    function setActiveNav(active, inactive) {
+        active.classList.add(...navActive);
+        active.classList.remove(...navInactive);
+        inactive.classList.add(...navInactive);
+        inactive.classList.remove(...navActive);
+    }
+
+    function showView(view) {
+        if (view === 'speak') {
+            viewSpeak.classList.remove('hidden');
+            viewMeter.classList.add('hidden');
+            setActiveNav(navSpeak, navMeter);
+        } else {
+            viewMeter.classList.remove('hidden');
+            viewSpeak.classList.add('hidden');
+            setActiveNav(navMeter, navSpeak);
+        }
+    }
+
+    navMeter.addEventListener('click', (e) => { e.preventDefault(); showView('meter'); });
+    navSpeak.addEventListener('click', (e) => { e.preventDefault(); showView('speak'); });
+
+    /* ---------- Speak Timer ---------- */
+    const stSetup = document.getElementById('st-setup');
+    const stStage = document.getElementById('st-stage');
+    const stSpeakersInput = document.getElementById('st-speakers');
+    const stMinInput = document.getElementById('st-min');
+    const stSecInput = document.getElementById('st-sec');
+    const stStartBtn = document.getElementById('st-start');
+    const stPauseBtn = document.getElementById('st-pause');
+    const stNextBtn = document.getElementById('st-next');
+    const stNewBtn = document.getElementById('st-new');
+    const stNameEl = document.getElementById('st-current-name');
+    const stTimeEl = document.getElementById('st-time');
+    const stBarEl = document.getElementById('st-bar');
+    const stQueueEl = document.getElementById('st-queue');
+    const stEmptyEl = document.getElementById('st-empty');
+
+    let stQueue = [];
+    let stCurrent = null;
+    let stDuration = 0;
+    let stRemaining = 0;
+    let stTimer = null;
+    let stRunning = false;
+
+    function stFormat(sec) {
+        sec = Math.max(0, Math.ceil(sec));
+        const m = Math.floor(sec / 60);
+        const s = sec % 60;
+        return m + ':' + String(s).padStart(2, '0');
+    }
+
+    function stRenderQueue() {
+        stQueueEl.innerHTML = '';
+        stQueue.forEach((name) => {
+            const li = document.createElement('li');
+            li.className = 'flex items-center justify-between gap-3 bg-slate-800/60 rounded-lg px-4 py-3 transition-all duration-300';
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'text-slate-200 truncate';
+            nameSpan.textContent = name;
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'text-slate-400 font-mono text-sm tabular-nums';
+            timeSpan.textContent = stFormat(stDuration);
+            li.appendChild(nameSpan);
+            li.appendChild(timeSpan);
+            stQueueEl.appendChild(li);
+        });
+        stEmptyEl.classList.toggle('hidden', stQueue.length > 0);
+    }
+
+    function stUpdateDisplay() {
+        stTimeEl.textContent = stFormat(stRemaining);
+        const pct = stDuration > 0 ? Math.max(0, (stRemaining / stDuration) * 100) : 0;
+        stBarEl.style.width = pct + '%';
+    }
+
+    function stShowCurrent() {
+        stNameEl.classList.add('opacity-0');
+        setTimeout(() => {
+            stNameEl.textContent = stCurrent !== null ? stCurrent : 'Done';
+            stNameEl.classList.remove('opacity-0');
+        }, 200);
+        stRemaining = stDuration;
+        stUpdateDisplay();
+    }
+
+    function stTick() {
+        stRemaining -= 1;
+        stUpdateDisplay();
+        if (stRemaining <= 0) {
+            stAdvance();
+        }
+    }
+
+    function stStartTimer() {
+        if (stTimer) return;
+        stTimer = setInterval(stTick, 1000);
+        stRunning = true;
+        stPauseBtn.textContent = 'Stop';
+    }
+
+    function stStopTimer() {
+        clearInterval(stTimer);
+        stTimer = null;
+        stRunning = false;
+        stPauseBtn.textContent = 'Resume';
+    }
+
+    function stFinish() {
+        stCurrent = null;
+        stNameEl.classList.add('opacity-0');
+        setTimeout(() => {
+            stNameEl.textContent = 'Done';
+            stNameEl.classList.remove('opacity-0');
+        }, 200);
+        stRemaining = 0;
+        stUpdateDisplay();
+        stPauseBtn.disabled = true;
+        stNextBtn.disabled = true;
+        stPauseBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        stNextBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+
+    function stAdvance() {
+        stStopTimer();
+        const firstLi = stQueueEl.firstElementChild;
+        const promote = () => {
+            if (stQueue.length > 0) {
+                stCurrent = stQueue.shift();
+                stRenderQueue();
+                stShowCurrent();
+                stStartTimer();
+            } else {
+                stFinish();
+            }
+        };
+        if (firstLi) {
+            firstLi.classList.add('-translate-x-6', 'opacity-0');
+            setTimeout(promote, 250);
+        } else {
+            promote();
+        }
+    }
+
+    stStartBtn.addEventListener('click', () => {
+        const names = stSpeakersInput.value.split('\n').map(n => n.trim()).filter(n => n.length > 0);
+        if (names.length === 0) {
+            stSpeakersInput.focus();
+            return;
+        }
+        const mins = parseInt(stMinInput.value) || 0;
+        const secs = parseInt(stSecInput.value) || 0;
+        stDuration = mins * 60 + secs;
+        if (stDuration <= 0) {
+            stMinInput.focus();
+            return;
+        }
+        stQueue = names.slice();
+        stCurrent = stQueue.shift();
+        stPauseBtn.disabled = false;
+        stNextBtn.disabled = false;
+        stPauseBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        stNextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        stSetup.classList.add('hidden');
+        stStage.classList.remove('hidden');
+        stRenderQueue();
+        stShowCurrent();
+        stStartTimer();
+    });
+
+    stPauseBtn.addEventListener('click', () => {
+        if (stRunning) {
+            stStopTimer();
+        } else {
+            stStartTimer();
+        }
+    });
+
+    stNextBtn.addEventListener('click', () => {
+        stAdvance();
+    });
+
+    stNewBtn.addEventListener('click', () => {
+        stStopTimer();
+        stStage.classList.add('hidden');
+        stSetup.classList.remove('hidden');
+    });
 </script>
 
 </body>
